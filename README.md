@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # VELOop Rewards
 
 VELOop Rewards is a full-stack MERN application that allows users to manage reward points (VEs) and redeem them for available payout options such as UPI Cash, Amazon Gift Cards, and Google Play Gift Cards.
@@ -325,3 +326,7 @@ The `Backend` directory uses an uppercase name in this archive. If deploying to 
 ## V5 pre-deployment updates
 
 See `PRE_DEPLOYMENT_AUDIT.md` for the V5 changes and required checks. Before creating redemptions, configure `PAYOUT_ENCRYPTION_KEY` in `Backend/.env`. For an existing database, take a backup and run `npm run migrate:sensitive-payout-data` from `Backend` to encrypt legacy payout details and backfill reward snapshots. Do not lose the encryption key.
+=======
+# VELOop-Rewards
+Full Stack VELOop Rewards and Payout Management System
+>>>>>>> ace7bb28c88391eeaf75bb31de4b1e74c7f1591e
