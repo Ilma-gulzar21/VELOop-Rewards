@@ -1,0 +1,11 @@
+{
+  "_WARNING": "DEMO PLACEHOLDER VALUES ONLY. These are NOT the verified VELoop production denominations. Used only by `npm run seed:demo` (DEMO_MODE=true).",
+  "options": [
+    { "method": "upi",        "rewardValue": 10, "requiredVEs": 2400,  "description": "Demo: instant UPI cash.",          "sortOrder": 1 },
+    { "method": "upi",        "rewardValue": 50, "requiredVEs": 12000, "description": "Demo: instant UPI cash.",          "sortOrder": 2 },
+    { "method": "amazon",     "rewardValue": 25, "requiredVEs": 5800,  "description": "Demo: Amazon gift card by email.", "sortOrder": 1 },
+    { "method": "amazon",     "rewardValue": 50, "requiredVEs": 11600, "description": "Demo: Amazon gift card by email.", "sortOrder": 2 },
+    { "method": "googlePlay", "rewardValue": 25, "requiredVEs": 5800,  "description": "Demo: Google Play code by email.", "sortOrder": 1 },
+    { "method": "googlePlay", "rewardValue": 50, "requiredVEs": 11600, "description": "Demo: Google Play code by email.", "sortOrder": 2 }
+  ]
+}

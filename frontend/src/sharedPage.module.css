@@ -1,0 +1,2 @@
+.pageShell { min-width: 0; isolation: isolate; }
+.componentShell { min-width: 0; }

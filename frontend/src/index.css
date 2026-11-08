@@ -1,0 +1,367 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root {
+  font-family: 'DM Sans', sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+
+  --primary: #3563e9;
+  --primary-dark: #244bc5;
+  --secondary: #6c8cff;
+  --accent: #14b8e6;
+
+  --body-bg: #f4f7ff;
+  --surface: #ffffff;
+  --surface-soft: #edf3ff;
+  --surface-hover: #e8efff;
+
+  --text-primary: #17264a;
+  --text-secondary: #667493;
+  --text-muted: #91a0bb;
+
+  --border: #e5eaf5;
+  --navbar-bg: rgba(255, 255, 255, 0.88);
+
+  --shadow-sm: 0 4px 16px rgba(36, 75, 197, 0.06);
+  --shadow-md: 0 12px 35px rgba(36, 75, 197, 0.09);
+  --shadow-lg: 0 22px 60px rgba(36, 75, 197, 0.13);
+
+  --blue-gradient: linear-gradient(135deg, #3563e9, #648aff);
+  --hero-gradient: linear-gradient(135deg, #eaf0ff, #f5f8ff);
+
+  --container-width: 1440px;
+  --page-padding: clamp(14px, 3vw, 40px);
+}
+
+[data-theme='dark'] {
+  --primary: #7195ff;
+  --primary-dark: #5278f1;
+  --secondary: #91aaff;
+  --accent: #36c9f0;
+
+  --body-bg: #161827;
+  --surface: #151f35;
+  --surface-soft: #1b2944;
+  --surface-hover: #223454;
+
+  --text-primary: #f0f4ff;
+  --text-secondary: #b0bdd5;
+  --text-muted: #8191af;
+
+  --border: #293957;
+  --navbar-bg: rgba(15, 24, 43, 0.92);
+
+  --shadow-sm: 0 4px 18px rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 12px 35px rgba(0, 0, 0, 0.22);
+  --shadow-lg: 0 22px 60px rgba(0, 0, 0, 0.32);
+
+  --blue-gradient: linear-gradient(135deg, #315bd5, #537df5);
+  --hero-gradient: linear-gradient(135deg, #172846, #18233b);
+}
+
+/* Universal Reset */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  min-height: 100%;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  width: 100%;
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+
+  background: var(--body-bg);
+  color: var(--text-primary);
+
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+
+  transition:
+    background 0.35s ease,
+    color 0.35s ease;
+
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: clip;
+}
+
+/* Common Elements */
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img,
+video,
+iframe,
+svg {
+  max-width: 100%;
+}
+
+img {
+  display: block;
+  height: auto;
+}
+
+table {
+  max-width: 100%;
+}
+
+/* Global Theme-Aware Elements */
+
+.card,
+.dashboard-card,
+.reward-card,
+.stat-card,
+.panel,
+.form-container,
+.modal-content,
+.table-container {
+  background: var(--surface);
+  color: var(--text-primary);
+  border-color: var(--border);
+  box-shadow: var(--shadow-sm);
+
+  transition:
+    background 0.35s ease,
+    color 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+/* Inputs */
+
+input,
+select,
+textarea {
+  width: auto;
+  max-width: 100%;
+
+  background: var(--surface) !important;
+  color: var(--text-primary) !important;
+
+  border: 1px solid var(--border) !important;
+  border-radius: 8px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 1;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px rgba(83, 125, 245, 0.15) !important;
+  outline: none;
+}
+
+/* Tables */
+
+.table {
+  width: 100%;
+  color: var(--text-primary);
+}
+
+.table > :not(caption) > * > * {
+  background-color: var(--surface);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+/* Primary Button */
+
+.btn-primary {
+  background: var(--blue-gradient);
+  border: none;
+  color: #ffffff;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+.btn-primary:hover {
+  opacity: 0.92;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* Text Selection */
+
+::selection {
+  background: var(--primary);
+  color: white;
+}
+
+/* Authentication Loading Screen */
+
+.auth-loading {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 15px;
+  padding: 20px;
+
+  background: var(--body-bg);
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.auth-spinner {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+
+  border: 4px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+
+  animation: authSpin 0.8s linear infinite;
+}
+
+.auth-loading p {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+@keyframes authSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Large Screens */
+
+@media (min-width: 1600px) {
+  :root {
+    --page-padding: 48px;
+  }
+}
+
+/* Tablet */
+
+@media (max-width: 992px) {
+  body {
+    font-size: 15px;
+  }
+
+  .table-container {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table {
+    min-width: 650px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
+  .auth-loading {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .auth-spinner {
+    width: 38px;
+    height: 38px;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+}
+
+/* Small Mobile */
+
+@media (max-width: 480px) {
+  :root {
+    --page-padding: 14px;
+  }
+
+  body {
+    min-width: 320px;
+  }
+
+  .auth-loading {
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .auth-loading p {
+    font-size: 13px;
+  }
+
+  .auth-spinner {
+    width: 34px;
+    height: 34px;
+    border-width: 3px;
+  }
+}
+
+/* Reduced Motion Accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,721 @@
+/* ================================
+   ADMIN PAYOUT MANAGEMENT
+================================ */
+
+.admin-payout-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 30px;
+  background: #f5f6fa;
+  color: #1f2937;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.admin-payout-page *,
+.payout-modal-overlay * {
+  box-sizing: border-box;
+}
+
+/* Header */
+
+.payout-management-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+  gap: 20px;
+}
+
+.payout-management-header h1 {
+  margin: 15px 0 5px;
+  font-size: 28px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.payout-management-header p {
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.payout-back-btn,
+.payout-refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: 0.2s ease;
+}
+
+.payout-back-btn {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.payout-back-btn:hover {
+  background: #d1d5db;
+}
+
+.payout-refresh-btn {
+  background: #0d6efd;
+  color: white;
+}
+
+.payout-refresh-btn:hover {
+  background: #0b5ed7;
+}
+
+/* Tabs */
+
+.payout-management-tabs {
+  display: flex;
+  gap: 12px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 25px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.payout-management-tabs button {
+  flex-shrink: 0;
+  padding: 13px 18px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #6b7280;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: 0.2s ease;
+}
+
+.payout-management-tabs button.active {
+  color: #0d6efd;
+  border-bottom-color: #0d6efd;
+}
+
+/* Main Section */
+
+.payout-management-section {
+  width: 100%;
+  background: white;
+  padding: 24px;
+  border-radius: 10px;
+  min-width: 0;
+}
+
+.payout-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 22px;
+}
+
+.payout-section-heading h2 {
+  margin: 0 0 5px;
+  font-size: 21px;
+  line-height: 1.4;
+}
+
+.payout-section-heading p {
+  color: #6b7280;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.payout-add-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 11px 16px;
+  border: none;
+  border-radius: 7px;
+  background: #0d6efd;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: 0.2s ease;
+}
+
+.payout-add-btn:hover {
+  background: #0b5ed7;
+}
+
+.payout-add-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Payout Method Cards */
+
+.payout-method-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.payout-method-card {
+  min-width: 0;
+  border: 1px solid #e5e7eb;
+  padding: 20px;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.payout-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.payout-method-key {
+  display: inline-block;
+  background: #e7f1ff;
+  color: #0d6efd;
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.payout-enabled,
+.payout-disabled {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.payout-enabled {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.payout-disabled {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.payout-method-card h3 {
+  margin: 18px 0 8px;
+  font-size: 18px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.payout-method-card p {
+  color: #6b7280;
+  font-size: 13px;
+  min-height: 40px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.payout-card-footer {
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+  margin-top: 15px;
+}
+
+.payout-card-footer > span {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.payout-card-actions,
+.reward-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 13px;
+}
+
+.payout-edit-btn,
+.payout-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 11px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: 0.2s ease;
+}
+
+.payout-edit-btn {
+  background: #e7f1ff;
+  color: #0d6efd;
+}
+
+.payout-edit-btn:hover {
+  background: #cfe2ff;
+}
+
+.payout-toggle-btn {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.payout-toggle-btn:hover {
+  background: #e5e7eb;
+}
+
+/* Reward Options Table */
+
+.reward-table-container {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 7px;
+}
+
+.reward-options-table {
+  width: 100%;
+  min-width: 850px;
+  border-collapse: collapse;
+}
+
+.reward-options-table th,
+.reward-options-table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 13px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.reward-options-table th {
+  background: #f9fafb;
+  color: #4b5563;
+  white-space: nowrap;
+}
+
+.reward-actions {
+  margin: 0;
+  min-width: max-content;
+}
+
+.reward-empty {
+  text-align: center !important;
+  padding: 30px !important;
+  color: #6b7280;
+}
+
+/* Modal */
+
+.payout-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.payout-modal {
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin: auto;
+}
+
+.payout-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 22px;
+}
+
+.payout-modal-header h2 {
+  margin: 0;
+  font-size: 21px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.payout-modal-header button {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/* Form */
+
+.payout-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 17px;
+  min-width: 0;
+}
+
+.payout-form-group label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.payout-form-group input,
+.payout-form-group select,
+.payout-form-group textarea {
+  width: 100%;
+  max-width: 100%;
+  padding: 11px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.payout-form-group textarea {
+  min-height: 75px;
+  resize: vertical;
+}
+
+.payout-form-group input:focus,
+.payout-form-group select:focus,
+.payout-form-group textarea:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.12);
+}
+
+/* Modal Buttons */
+
+.payout-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.payout-cancel-btn,
+.payout-save-btn {
+  padding: 10px 17px;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.payout-cancel-btn {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.payout-cancel-btn:hover {
+  background: #d1d5db;
+}
+
+.payout-save-btn {
+  background: #0d6efd;
+  color: white;
+}
+
+.payout-save-btn:hover {
+  background: #0b5ed7;
+}
+
+.payout-save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Error and Success Messages */
+
+.payout-error-message,
+.payout-success-message {
+  padding: 13px 16px;
+  border-radius: 7px;
+  margin-bottom: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+}
+
+.payout-error-message {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.payout-error-message button {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+.payout-success-message {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.payout-loading {
+  text-align: center;
+  padding: 50px 15px;
+  color: #6b7280;
+}
+
+/* ================================
+   RESPONSIVE BREAKPOINTS
+================================ */
+
+/* Large Desktop */
+
+@media (min-width: 1600px) {
+  .admin-payout-page {
+    padding: 40px;
+  }
+
+  .payout-management-header h1 {
+    font-size: 32px;
+  }
+
+  .payout-management-section {
+    padding: 30px;
+  }
+
+  .payout-method-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+/* Tablet and Small Laptop */
+
+@media (max-width: 1024px) {
+  .admin-payout-page {
+    padding: 24px;
+  }
+
+  .payout-management-header h1 {
+    font-size: 25px;
+  }
+
+  .payout-management-section {
+    padding: 20px;
+  }
+
+  .payout-method-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+  }
+}
+
+/* Tablet and Mobile */
+
+@media (max-width: 768px) {
+  .admin-payout-page {
+    padding: 16px;
+  }
+
+  .payout-management-header {
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .payout-management-header h1 {
+    font-size: 23px;
+  }
+
+  .payout-management-section {
+    padding: 16px;
+  }
+
+  .payout-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .payout-add-btn {
+    width: 100%;
+  }
+
+  .payout-management-tabs {
+    gap: 5px;
+    margin-bottom: 20px;
+  }
+
+  .payout-management-tabs button {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+
+  .payout-method-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .payout-method-card {
+    padding: 16px;
+  }
+
+  .payout-modal {
+    padding: 20px;
+  }
+}
+
+/* Small Mobile */
+
+@media (max-width: 576px) {
+  .admin-payout-page {
+    padding: 12px;
+  }
+
+  .payout-management-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .payout-management-header h1 {
+    font-size: 21px;
+    margin-top: 5px;
+  }
+
+  .payout-back-btn,
+  .payout-refresh-btn {
+    width: 100%;
+  }
+
+  .payout-management-section {
+    padding: 13px;
+    border-radius: 8px;
+  }
+
+  .payout-section-heading h2 {
+    font-size: 19px;
+  }
+
+  .payout-section-heading p {
+    font-size: 13px;
+  }
+
+  .payout-method-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .payout-method-card {
+    padding: 16px;
+  }
+
+  .payout-card-actions,
+  .reward-actions {
+    gap: 7px;
+  }
+
+  .payout-edit-btn,
+  .payout-toggle-btn {
+    flex: 1;
+  }
+
+  .payout-modal-overlay {
+    padding: 10px;
+    align-items: center;
+  }
+
+  .payout-modal {
+    padding: 18px;
+    max-height: 92vh;
+  }
+
+  .payout-modal-header h2 {
+    font-size: 19px;
+  }
+
+  .payout-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .payout-cancel-btn,
+  .payout-save-btn {
+    width: 100%;
+  }
+
+  .payout-error-message,
+  .payout-success-message {
+    padding: 12px;
+    font-size: 13px;
+  }
+}
+
+/* Very Small Mobile */
+
+@media (max-width: 360px) {
+  .admin-payout-page {
+    padding: 9px;
+  }
+
+  .payout-management-header h1 {
+    font-size: 19px;
+  }
+
+  .payout-management-section {
+    padding: 11px;
+  }
+
+  .payout-method-card {
+    padding: 13px;
+  }
+
+  .payout-method-card h3 {
+    font-size: 16px;
+  }
+
+  .payout-management-tabs button {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .payout-modal {
+    padding: 15px;
+  }
+
+  .payout-form-group input,
+  .payout-form-group select,
+  .payout-form-group textarea {
+    font-size: 13px;
+  }
+}

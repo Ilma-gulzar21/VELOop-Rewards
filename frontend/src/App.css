@@ -1,0 +1,85 @@
+/* ROOT */
+
+#root {
+  min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* MAIN CONTENT */
+
+main {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* RESPONSIVE BOX SIZING */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* BUTTONS AND LINKS */
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+}
+
+/* PREVENT HORIZONTAL OVERFLOW */
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* RESPONSIVE MEDIA */
+
+img,
+video,
+iframe {
+  max-width: 100%;
+}
+
+/* TABLET */
+
+@media (max-width: 768px) {
+  #root,
+  main {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 480px) {
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button:focus-visible,
+  a:focus-visible {
+    outline-width: 2px;
+    outline-offset: 2px;
+  }
+}

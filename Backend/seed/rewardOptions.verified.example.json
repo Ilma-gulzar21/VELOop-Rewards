@@ -1,0 +1,9 @@
+{
+  "_README": "Copy to rewardOptions.verified.json and fill with the values CONFIRMED from the live VELoop payout pages / assignment owner. Do not guess. Set confirmed=true only after verification. Then run `npm run seed:data`.",
+  "confirmed": false,
+  "options": [
+    { "method": "upi",        "rewardValue": 0, "requiredVEs": 0, "description": "", "sortOrder": 1 },
+    { "method": "amazon",     "rewardValue": 0, "requiredVEs": 0, "description": "", "sortOrder": 1 },
+    { "method": "googlePlay", "rewardValue": 0, "requiredVEs": 0, "description": "", "sortOrder": 1 }
+  ]
+}
