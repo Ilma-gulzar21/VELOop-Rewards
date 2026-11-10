@@ -1,9 +1,11 @@
 import axios from 'axios'
 
+// API Base URL
 const API_BASE_URL = (
   import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 ).replace(/\/+$/, '')
 
+// User API
 export const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 20000,
@@ -12,6 +14,7 @@ export const api = axios.create({
   }
 })
 
+// Admin API
 export const adminApi = axios.create({
   baseURL: API_BASE_URL,
   timeout: 20000,

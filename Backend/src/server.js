@@ -30,26 +30,44 @@ app.set('trust proxy', 1)
 app.use(helmet())
 
 // CORS configuration
-const allowedOrigins = (
-process.env.CLIENT_ORIGIN || process.env.FRONTEND_URL || 'http://localhost:5173'
-)
-.split(',')
-.map(origin => origin.trim())
 
-app.use(cors({
-origin: (origin, callback) => {
-// Allow requests without an Origin header (Hoppscotch/server clients)
-if (!origin || allowedOrigins.includes(origin)) {
-return callback(null, true)
+const allowedOrigins = [
+  ...(process.env.CLIENT_ORIGIN || '').split(','),
+  ...(process.env.FRONTEND_URL || '').split(','),
+  'http://localhost:5173'
+]
+  .map(origin => origin.trim().replace(/\/$/, ''))
+  .filter(Boolean)
+
+console.log('Allowed CORS Origins:', allowedOrigins)
+
+const corsOptions = {
+  origin: (origin, callback) => {
+
+    // Allow requests without origin (Hoppscotch/server clients)
+    if (!origin) {
+      return callback(null, true)
+    }
+
+    const normalizedOrigin = origin.replace(/\/$/, '')
+
+    if (allowedOrigins.includes(normalizedOrigin)) {
+      return callback(null, true)
+    }
+
+    console.log('CORS blocked origin:', origin)
+
+    return callback(null, false)
+  },
+
+  credentials: true,
+
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+
+  allowedHeaders: ['Content-Type', 'Authorization']
 }
 
-
-return callback(null, false)
-
-
-},
-credentials: true
-}))
+app.use(cors(corsOptions))
 
 // Limit request body size
 app.use(express.json({ limit: '10kb' }))
