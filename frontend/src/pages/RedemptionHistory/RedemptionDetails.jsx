@@ -22,6 +22,10 @@ import {
 import api from '../../services/api'
 import './RedemptionDetails.css'
 
+// ======================================
+// FORMAT HELPERS
+// ======================================
+
 const formatStatus = status => {
   return (
     status
@@ -58,6 +62,20 @@ const formatMethod = method => {
   return methods[method] || method || 'Unknown'
 }
 
+const formatAmount = (amount, currency = 'INR') => {
+  if (amount === undefined || amount === null) return '--'
+
+  if (currency === 'INR') {
+    return `₹${Number(amount).toLocaleString('en-IN')}`
+  }
+
+  return `${currency} ${Number(amount).toLocaleString('en-IN')}`
+}
+
+// ======================================
+// REDEMPTION DETAILS COMPONENT
+// ======================================
+
 const RedemptionDetails = () => {
   const { redemptionId } = useParams()
   const navigate = useNavigate()
@@ -68,7 +86,10 @@ const RedemptionDetails = () => {
   const [cancelLoading, setCancelLoading] = useState(false)
   const [cancelMessage, setCancelMessage] = useState('')
 
-  // Fetch redemption details from backend
+  // ======================================
+  // FETCH REDEMPTION DETAILS
+  // ======================================
+
   const fetchDetails = useCallback(async () => {
     try {
       setLoading(true)
@@ -78,7 +99,10 @@ const RedemptionDetails = () => {
         `/redemptions/my/${redemptionId}`
       )
 
-      if (response.data?.success && response.data?.redemption) {
+      if (
+        response.data?.success &&
+        response.data?.redemption
+      ) {
         setRedemption(response.data.redemption)
       } else {
         setRedemption(null)
@@ -107,29 +131,74 @@ const RedemptionDetails = () => {
     fetchDetails()
   }, [fetchDetails])
 
+  // ======================================
+  // CANCEL PENDING REDEMPTION
+  // ======================================
+
   const handleCancelRedemption = async () => {
-    if (!redemption || redemption.status !== 'PENDING') return
-    const confirmed = window.confirm('Cancel this pending redemption? Your VEs will be refunded to your wallet immediately.')
+    if (
+      !redemption ||
+      redemption.status?.toUpperCase() !== 'PENDING' ||
+      cancelLoading
+    ) {
+      return
+    }
+
+    const confirmed = window.confirm(
+      'Are you sure you want to cancel this redemption? Your VEs will be refunded to your wallet immediately.'
+    )
+
     if (!confirmed) return
+
     try {
       setCancelLoading(true)
       setCancelMessage('')
-      const response = await api.patch(`/redemptions/my/${redemption._id}/cancel`)
-      setCancelMessage(response.data?.message || 'Redemption cancelled and VEs refunded.')
+
+      const response = await api.patch(
+        `/redemptions/my/${redemption._id}/cancel`
+      )
+
+      setCancelMessage(
+        response.data?.message ||
+        'Redemption cancelled and VEs refunded successfully.'
+      )
+
+      // Fetch updated redemption details
       await fetchDetails()
+
     } catch (err) {
-      setCancelMessage(err.response?.data?.message || 'Unable to cancel this redemption.')
-    } finally { setCancelLoading(false) }
+      console.error(
+        'Redemption Cancellation Error:',
+        err.response?.data || err.message
+      )
+
+      setCancelMessage(
+        err.response?.data?.message ||
+        'Unable to cancel this redemption. Please try again.'
+      )
+
+    } finally {
+      setCancelLoading(false)
+    }
   }
+
+  // ======================================
+  // STATUS HELPERS
+  // ======================================
 
   const getStatusClass = status => {
     return status?.toLowerCase().replaceAll('_', '-') || 'unknown'
   }
 
+  // ======================================
+  // LOADING STATE
+  // ======================================
+
   if (loading) {
     return (
       <main className={`${styles.pageShell} redemption-details-page`}>
         <div className="details-state">
+
           <RefreshCw
             size={35}
             className="details-spinner"
@@ -140,14 +209,20 @@ const RedemptionDetails = () => {
           <p>
             Please wait while we fetch your transaction.
           </p>
+
         </div>
       </main>
     )
   }
 
+  // ======================================
+  // ERROR STATE
+  // ======================================
+
   if (error || !redemption) {
     return (
       <main className="redemption-details-page">
+
         <div className="details-state">
 
           <XCircle size={42} />
@@ -174,25 +249,50 @@ const RedemptionDetails = () => {
           </button>
 
         </div>
+
       </main>
     )
   }
 
-  // Backend payout details
+  // ======================================
+  // REDEMPTION DATA
+  // ======================================
+
   const payoutDetails = redemption.payoutDetails || {}
 
-  // Normalize status
   const currentStatus = redemption.status?.toUpperCase()
 
   const isCompleted = currentStatus === 'COMPLETED'
 
-  const isRejected = [
+  const isCancelled = currentStatus === 'CANCELLED'
+
+  const isRejected = currentStatus === 'REJECTED'
+
+  const isFailed = currentStatus === 'FAILED'
+
+  const isPending = currentStatus === 'PENDING'
+
+  const isErrorStatus = [
     'REJECTED',
     'FAILED',
     'CANCELLED'
   ].includes(currentStatus)
 
-  // Actual status history from MongoDB
+  const payoutMethod =
+    redemption.methodKey ||
+    redemption.payoutMethod?.key ||
+    redemption.rewardSnapshot?.methodKey
+
+  const currency =
+    redemption.currency ||
+    redemption.rewardOption?.currency ||
+    redemption.rewardSnapshot?.currency ||
+    'INR'
+
+  // ======================================
+  // STATUS HISTORY
+  // ======================================
+
   const statusHistory = redemption.statusHistory?.length
     ? redemption.statusHistory
     : [
@@ -212,7 +312,23 @@ const RedemptionDetails = () => {
           : [])
       ]
 
+  // ======================================
+  // ADMIN NOTE HEADING
+  // ======================================
+
+  const getNoteHeading = () => {
+    if (isCancelled) return 'Cancellation Note'
+    if (isRejected) return 'Rejection Reason'
+    if (isFailed) return 'Failure Reason'
+
+    return 'Admin Note'
+  }
+
   const adminNote = redemption.adminNote
+
+  // ======================================
+  // MAIN UI
+  // ======================================
 
   return (
     <main className="redemption-details-page">
@@ -258,7 +374,7 @@ const RedemptionDetails = () => {
 
             {isCompleted ? (
               <CheckCircle2 size={34} />
-            ) : isRejected ? (
+            ) : isErrorStatus ? (
               <XCircle size={34} />
             ) : (
               <Clock3 size={34} />
@@ -270,16 +386,24 @@ const RedemptionDetails = () => {
             REDEMPTION REQUEST
           </span>
 
-          <h1>{formatStatus(currentStatus)}</h1>
+          <h1>
+            {formatStatus(currentStatus)}
+          </h1>
 
           <p>
             {isCompleted
               ? 'Your redemption request has been completed successfully.'
-              : currentStatus === 'CANCELLED'
+              : isCancelled
                 ? 'You cancelled this pending request. The VEs have been returned to your wallet.'
                 : isRejected
-                  ? 'Your redemption request could not be completed.'
-                : 'Your redemption request is being processed.'}
+                  ? 'Your redemption request was rejected.'
+                  : isFailed
+                    ? 'Your redemption request could not be completed.'
+                    : currentStatus === 'APPROVED'
+                      ? 'Your redemption request has been approved.'
+                      : currentStatus === 'UNDER_REVIEW'
+                        ? 'Your redemption request is currently under review.'
+                        : 'Your redemption request is being processed.'}
           </p>
 
           <div className="details-reference">
@@ -292,12 +416,29 @@ const RedemptionDetails = () => {
 
           </div>
 
-          {currentStatus === 'PENDING' && (
-            <button type="button" className="details-refresh-button" onClick={handleCancelRedemption} disabled={cancelLoading}>
-              {cancelLoading ? 'Cancelling...' : 'Cancel Request'}
+          {/* CANCEL BUTTON */}
+
+          {isPending && (
+            <button
+              type="button"
+              className="details-cancel-button"
+              onClick={handleCancelRedemption}
+              disabled={cancelLoading}
+            >
+              {cancelLoading
+                ? 'Cancelling...'
+                : 'Cancel Request'}
             </button>
           )}
-          {cancelMessage && <p role="status" className="details-cancel-message">{cancelMessage}</p>}
+
+          {cancelMessage && (
+            <p
+              role="status"
+              className="details-cancel-message"
+            >
+              {cancelMessage}
+            </p>
+          )}
 
           <span
             className={`details-status-badge ${getStatusClass(currentStatus)}`}
@@ -333,35 +474,49 @@ const RedemptionDetails = () => {
               <div className="details-info-grid">
 
                 <div className="details-info-item">
+
                   <span>Reward Amount</span>
 
                   <strong>
-                    {(redemption.currency || redemption.rewardOption?.currency) === 'INR' ? '₹' : `${redemption.currency || redemption.rewardOption?.currency || ''} `}{redemption.rewardValue ?? '--'}
+                    {formatAmount(
+                      redemption.rewardValue,
+                      currency
+                    )}
                   </strong>
+
                 </div>
 
                 <div className="details-info-item">
+
                   <span>Required VEs</span>
 
                   <strong>
                     {redemption.requiredVEs?.toLocaleString('en-IN') ?? '--'} VEs
                   </strong>
+
                 </div>
 
                 <div className="details-info-item">
+
                   <span>Payout Method</span>
 
                   <strong>
-                    {formatMethod(redemption.methodKey)}
+                    {formatMethod(
+                      payoutMethod ||
+                      redemption.payoutMethod?.name
+                    )}
                   </strong>
+
                 </div>
 
                 <div className="details-info-item">
+
                   <span>Request Date</span>
 
                   <strong>
                     {formatDate(redemption.createdAt)}
                   </strong>
+
                 </div>
 
               </div>
@@ -387,7 +542,7 @@ const RedemptionDetails = () => {
 
               <div className="details-payout-box">
 
-                {redemption.methodKey === 'upi' ? (
+                {payoutMethod === 'upi' ? (
 
                   <>
                     <div className="details-payout-icon">
@@ -395,11 +550,13 @@ const RedemptionDetails = () => {
                     </div>
 
                     <div>
+
                       <span>UPI ID</span>
 
                       <strong>
                         {payoutDetails.upiId || '--'}
                       </strong>
+
                     </div>
                   </>
 
@@ -411,11 +568,13 @@ const RedemptionDetails = () => {
                     </div>
 
                     <div>
+
                       <span>Delivery Email</span>
 
                       <strong>
                         {payoutDetails.email || '--'}
                       </strong>
+
                     </div>
                   </>
 
@@ -451,7 +610,7 @@ const RedemptionDetails = () => {
                   return (
                     <div
                       className="timeline-item"
-                      key={`${itemStatus}-${index}`}
+                      key={item._id || `${itemStatus}-${index}`}
                     >
 
                       <div className="timeline-marker">
@@ -502,7 +661,9 @@ const RedemptionDetails = () => {
 
             {adminNote && (
               <div
-                className={`details-note-card ${isRejected ? 'error' : ''}`}
+                className={`details-note-card ${
+                  isErrorStatus ? 'error' : ''
+                }`}
               >
 
                 <AlertCircle size={21} />
@@ -510,9 +671,7 @@ const RedemptionDetails = () => {
                 <div>
 
                   <h3>
-                    {isRejected
-                      ? 'Rejection Reason'
-                      : 'Admin Note'}
+                    {getNoteHeading()}
                   </h3>
 
                   <p>{adminNote}</p>
@@ -527,6 +686,8 @@ const RedemptionDetails = () => {
           {/* RIGHT SIDEBAR */}
 
           <aside className="details-sidebar">
+
+            {/* REQUEST SUMMARY */}
 
             <div className="details-card">
 
@@ -546,40 +707,49 @@ const RedemptionDetails = () => {
               <div className="details-summary-list">
 
                 <div>
+
                   <span>Reference ID</span>
 
                   <strong>
                     {redemption.referenceId || '--'}
                   </strong>
+
                 </div>
 
                 <div>
+
                   <span>Created On</span>
 
                   <strong>
                     {formatDate(redemption.createdAt)}
                   </strong>
+
                 </div>
 
                 <div>
+
                   <span>Last Updated</span>
 
                   <strong>
                     {formatDate(redemption.updatedAt)}
                   </strong>
+
                 </div>
 
                 {redemption.completedAt && (
                   <div>
+
                     <span>Completed On</span>
 
                     <strong>
                       {formatDate(redemption.completedAt)}
                     </strong>
+
                   </div>
                 )}
 
                 <div>
+
                   <span>Refund Status</span>
 
                   <strong>
@@ -587,6 +757,7 @@ const RedemptionDetails = () => {
                       ? 'Refunded'
                       : 'Not Refunded'}
                   </strong>
+
                 </div>
 
               </div>
@@ -607,6 +778,8 @@ const RedemptionDetails = () => {
               </p>
 
             </div>
+
+            {/* HISTORY BUTTON */}
 
             <button
               className="details-history-button"

@@ -899,3 +899,412 @@
     transition: none !important;
   }
 }
+/* =====================================================
+   PREMIUM REDEMPTION DETAILS — FINAL POLISH
+===================================================== */
+
+/* Smooth page appearance */
+.redemption-details-page {
+  animation: detailsPageEnter 0.45s ease both;
+}
+
+@keyframes detailsPageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header buttons */
+.details-back-button,
+.details-refresh-button {
+  min-height: 42px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+}
+
+.details-back-button:hover,
+.details-refresh-button:hover {
+  background: var(--surface-soft);
+  transform: translateY(-2px);
+}
+
+.details-back-button:active,
+.details-refresh-button:active {
+  transform: scale(0.97);
+}
+
+.details-back-button:focus-visible,
+.details-refresh-button:focus-visible,
+.details-history-button:focus-visible,
+.details-state button:focus-visible {
+  outline: 3px solid rgba(82, 120, 245, 0.35);
+  outline-offset: 3px;
+}
+
+/* Premium status card */
+.details-status-card {
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(82, 120, 245, 0.10),
+      transparent 55%
+    ),
+    var(--surface);
+  box-shadow: var(--shadow-md);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.details-status-icon {
+  box-shadow: 0 8px 22px rgba(82, 120, 245, 0.12);
+  transition: transform 0.3s ease;
+}
+
+.details-status-card:hover .details-status-icon {
+  transform: translateY(-3px);
+}
+
+.details-status-card h1 {
+  letter-spacing: -0.8px;
+}
+
+.details-status-card > p {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+/* Status badge improvements */
+.details-status-badge {
+  margin-top: 5px;
+  letter-spacing: 0.3px;
+}
+
+.details-status-badge.cancelled {
+  color: #64748b;
+  background: rgba(100, 116, 139, 0.13);
+}
+
+.details-status-badge.under-review {
+  color: #c8872c;
+  background: rgba(230, 155, 67, 0.13);
+}
+
+.details-status-badge.approved {
+  color: #2875d9;
+  background: rgba(59, 130, 246, 0.12);
+}
+
+/* Cancel button */
+.details-status-card > button.details-refresh-button {
+  display: flex;
+  width: fit-content;
+  margin: 14px auto;
+  padding: 10px 18px;
+  border-color: rgba(220, 53, 69, 0.25);
+  color: #dc3545;
+  background: rgba(220, 53, 69, 0.07);
+}
+
+.details-status-card > button.details-refresh-button:hover {
+  border-color: #dc3545;
+  background: rgba(220, 53, 69, 0.13);
+}
+
+.details-status-card > button:disabled,
+.details-header button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Reference ID */
+.details-reference {
+  width: fit-content;
+  max-width: 100%;
+  min-width: 220px;
+  margin: 20px auto 15px;
+  padding: 13px 22px;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  background: var(--surface-soft);
+}
+
+/* Main information cards */
+.details-card {
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.details-card:hover {
+  border-color: rgba(82, 120, 245, 0.3);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.details-card-heading {
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border);
+}
+
+.details-card-icon {
+  transition: transform 0.25s ease;
+}
+
+.details-card:hover .details-card-icon {
+  transform: scale(1.06);
+}
+
+/* Information items */
+.details-info-item {
+  padding: 13px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--surface-soft);
+  transition: border-color 0.2s ease;
+}
+
+.details-info-item:hover {
+  border-color: var(--primary);
+}
+
+.details-info-item strong {
+  line-height: 1.6;
+}
+
+/* Payout information */
+.details-payout-box {
+  transition: border-color 0.2s ease;
+}
+
+.details-payout-box:hover {
+  border-color: var(--primary);
+}
+
+.details-payout-box strong {
+  line-height: 1.6;
+}
+
+/* Timeline */
+.timeline-item {
+  padding-bottom: 28px;
+}
+
+.timeline-marker {
+  border: 1px solid var(--border);
+  box-shadow: 0 3px 10px rgba(30, 50, 90, 0.06);
+}
+
+.timeline-item:last-child .timeline-marker {
+  color: #22a77c;
+  background: rgba(39, 174, 128, 0.12);
+  border-color: rgba(39, 174, 128, 0.25);
+}
+
+.timeline-content strong {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.timeline-content p {
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: var(--surface-soft);
+}
+
+/* Admin note */
+.details-note-card {
+  box-shadow: var(--shadow-sm);
+}
+
+.details-cancel-message {
+  max-width: 500px;
+  margin: 12px auto;
+  padding: 11px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-soft);
+  font-size: 12px;
+}
+
+/* Summary sidebar */
+.details-summary-list > div {
+  transition: padding-left 0.2s ease;
+}
+
+.details-summary-list > div:hover {
+  padding-left: 5px;
+}
+
+.details-summary-list strong {
+  line-height: 1.6;
+}
+
+/* Security card */
+.details-security-card {
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.details-security-card > svg {
+  padding: 5px;
+  box-sizing: content-box;
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+/* History button */
+.details-history-button {
+  min-height: 47px;
+  box-shadow: 0 7px 18px rgba(53, 99, 233, 0.18);
+}
+
+.details-history-button:hover {
+  box-shadow: 0 10px 23px rgba(53, 99, 233, 0.25);
+}
+
+/* Loading and error */
+.details-state button {
+  min-height: 42px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.details-state button:hover {
+  transform: translateY(-2px);
+}
+
+.details-state button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Dark theme refinements */
+[data-theme='dark'] .details-status-card {
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(113, 149, 255, 0.12),
+      transparent 55%
+    ),
+    var(--surface);
+}
+
+[data-theme='dark'] .details-info-item {
+  background: var(--surface-soft);
+}
+
+[data-theme='dark'] .details-reference {
+  background: var(--surface-soft);
+}
+
+[data-theme='dark'] .timeline-content p {
+  background: var(--surface-soft);
+}
+
+[data-theme='dark'] .details-status-card > button.details-refresh-button {
+  background: rgba(220, 53, 69, 0.12);
+}
+
+/* Tablet and mobile refinements */
+@media (max-width: 700px) {
+  .details-card:hover {
+    transform: none;
+  }
+
+  .details-status-card:hover .details-status-icon {
+    transform: none;
+  }
+
+  .details-info-item {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 380px) {
+  .details-reference {
+    min-width: 0;
+    width: 100%;
+    padding: 12px;
+  }
+
+  .details-status-card > button.details-refresh-button {
+    width: 100%;
+  }
+
+  .details-header {
+    justify-content: space-between;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .redemption-details-page,
+  .redemption-details-page *,
+  .redemption-details-page *::before,
+  .redemption-details-page *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+/* ======================================
+   REDEMPTION CANCEL BUTTON
+====================================== */
+
+.details-cancel-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-height: 42px;
+  margin: 14px auto;
+  padding: 10px 20px;
+
+  border: 1px solid rgba(220, 53, 69, 0.3);
+  border-radius: 10px;
+
+  color: #dc3545;
+  background: rgba(220, 53, 69, 0.08);
+
+  font-size: 12px;
+  font-weight: 800;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.details-cancel-button:hover {
+  border-color: #dc3545;
+  background: rgba(220, 53, 69, 0.15);
+  transform: translateY(-2px);
+}
+
+.details-cancel-button:active {
+  transform: scale(0.97);
+}
+
+.details-cancel-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.details-cancel-button:focus-visible {
+  outline: 3px solid rgba(220, 53, 69, 0.25);
+  outline-offset: 3px;
+}
+
+@media (max-width: 380px) {
+  .details-cancel-button {
+    width: 100%;
+  }
+}
